@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURATION (HARDCODED) ---
     // ЗАПОЛНИТЕ ЭТИ ДАННЫЕ В КОДЕ:
     const config = {
-        token: 'ghp_DCzSYIqW2jt26nz'+'EVKtfSkViC4z3Hd4EfJ2c',  // Вставьте ваш GitHub Token сюда
+        token: 'ghp_DCzSYIqW2jt26nz' + 'EVKtfSkViC4z3Hd4EfJ2c',  // Вставьте ваш GitHub Token сюда
         repo: 'sponikspubg-netizen/Extremeupload' // Ваш репозиторий
     };
 
@@ -268,13 +268,17 @@ document.addEventListener('DOMContentLoaded', () => {
         progressElement.style.width = '100%';
         progressElement.style.backgroundColor = '#10b981';
 
-        // Save to History
-        saveFileToHistory({
+        const fileData = {
             name: file.name,
             fullName: fileName,
             size: (file.size / (1024 * 1024)).toFixed(2),
             timestamp: Date.now()
-        });
+        };
+
+        // Save to History
+        saveFileToHistory(fileData);
+
+        return fileData;
     }
 
     function saveFileToHistory(fileData) {
