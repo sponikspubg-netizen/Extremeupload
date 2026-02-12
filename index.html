@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extremeupload | Secure File Hosting</title>
+    <meta name="description" content="A fast, secure, and modern file upload service.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/10.16.4/framer-motion.umd.min.js"></script>
+</head>
+
+<body class="bg-dark text-light overflow-x-hidden">
+    <div class="background-blob blob-1"></div>
+    <div class="background-blob blob-2"></div>
+
+    <nav class="glass-nav sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <div class="logo-icon bg-accent p-2 rounded-xl">
+                <i data-lucide="upload-cloud" class="text-white"></i>
+            </div>
+            <span class="text-2xl font-extrabold tracking-tight">EXTREME<span class="text-accent">UPLOAD</span></span>
+        </div>
+        <div class="hidden md:flex space-x-8 font-medium">
+            <a href="#" id="home-btn" class="hover:text-accent transition-colors">Home</a>
+            <button id="my-uploads-btn" class="hover:text-accent transition-colors flex items-center gap-1">
+                <i data-lucide="list" class="w-4 h-4"></i> My Uploads
+            </button>
+            <button id="settings-btn" class="hover:text-accent transition-colors flex items-center gap-1">
+                <i data-lucide="settings" class="w-4 h-4"></i> Settings
+            </button>
+        </div>
+        <button
+            class="bg-white text-dark px-6 py-2 rounded-full font-bold hover:bg-accent hover:text-white transition-all shadow-lg active:scale-95">
+            Sign Up
+        </button>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 pt-20 pb-32">
+        <section class="text-center mb-16" id="welcome-text">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+                Upload files without <br><span class="gradient-text">Limits & Hassle</span>
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
+                The fastest way to share your files. Secure, reliable, and completely free.
+                Drag and drop your content right here.
+            </p>
+        </section>
+
+        <section id="upload-view">
+            <div id="drop-area" class="glass-container p-12 text-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="upload-inner block">
+                    <div class="mb-6 flex justify-center">
+                        <div class="upload-circle glass p-8 rounded-full">
+                            <i data-lucide="plus" class="w-12 h-12 text-accent"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Drag & Drop files here</h3>
+                    <p class="text-gray-400 mb-8">or click to browse your computer</p>
+                    <input type="file" id="file-input" class="hidden" multiple>
+                    <button id="browse-btn"
+                        class="bg-accent text-white px-8 py-4 rounded-2xl font-bold shadow-[0_10px_20px_rgba(235,54,75,0.3)] hover:scale-105 transition-transform active:scale-95">
+                        Choose Files
+                    </button>
+                </div>
+            </div>
+
+            <div id="file-list" class="mt-8 space-y-4">
+                <!-- Files will be injected here -->
+            </div>
+
+            <div id="actions-bar" class="hidden mt-8 justify-center">
+                <button id="upload-all-btn"
+                    class="bg-white text-dark px-12 py-4 rounded-2xl font-bold shadow-xl hover:bg-accent hover:text-white transition-all">
+                    Upload Everything
+                </button>
+            </div>
+
+            <!-- Main Ad Placeholder -->
+            <div class="ad-container mt-12 glass-card p-4 text-center overflow-hidden">
+                <div
+                    class="flex justify-between items-center mb-2 px-2 text-[10px] uppercase tracking-widest text-gray-500 font-bold">
+                    <span>Sponsored Content</span>
+                    <i data-lucide="info" class="w-3 h-3"></i>
+                </div>
+                <div
+                    class="ad-placeholder h-32 flex items-center justify-center border border-dashed border-white/5 rounded-xl bg-white/5">
+                    <p class="text-gray-600 text-sm italic">Premium Ad Space Available</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="my-uploads-view" class="hidden">
+            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+                <i data-lucide="history" class="text-accent"></i> My Uploads
+            </h2>
+            <div id="uploads-history-list" class="space-y-4">
+                <!-- History items will be injected here -->
+                <div class="glass-card p-12 text-center text-gray-500">
+                    <i data-lucide="folder-open" class="mx-auto mb-4 w-12 h-12 opacity-20"></i>
+                    <p>No uploads yet. Start sharing some files!</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="download-view" class="hidden max-w-2xl mx-auto">
+            <div class="glass-container p-12 text-center">
+                <div class="mb-8 flex justify-center">
+                    <div class="p-8 glass rounded-full ring-8 ring-accent/10">
+                        <i data-lucide="file-down" class="w-16 h-16 text-accent"></i>
+                    </div>
+                </div>
+                <h2 id="download-filename" class="text-3xl font-extrabold mb-2 truncate">Filename.zip</h2>
+                <p id="download-filesize" class="text-gray-400 mb-8">0.00 MB • Ready to download</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a id="download-link" href="#" target="_blank"
+                        class="bg-accent text-white px-12 py-4 rounded-2xl font-bold shadow-lg hover:scale-105 transition-all text-xl">
+                        Download Now
+                    </a>
+                </div>
+
+                <!-- Ad below Download -->
+                <div class="mt-8 pt-8 border-t border-white/5">
+                    <div
+                        class="ad-placeholder-small h-20 flex items-center justify-center bg-white/5 rounded-xl border border-dashed border-white/10 group cursor-pointer hover:bg-white/10 transition-colors">
+                        <span class="text-gray-500 text-xs">Unlock Premium Speeds - Click to learn more</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-32 grid md:grid-cols-3 gap-8">
+            <div class="glass-card p-8">
+                <i data-lucide="shield-check" class="text-accent mb-4 w-10 h-10"></i>
+                <h4 class="text-xl font-bold mb-2">Military Encryption</h4>
+                <p class="text-gray-400">Your files are encrypted before they even leave your computer.</p>
+            </div>
+            <div class="glass-card p-8">
+                <i data-lucide="zap" class="text-accent mb-4 w-10 h-10"></i>
+                <h4 class="text-xl font-bold mb-2">Blazing Speeds</h4>
+                <p class="text-gray-400">Optimized servers worldwide ensure the fastest upload and download possible.
+                </p>
+            </div>
+            <div class="glass-card p-8">
+                <i data-lucide="infinity" class="text-accent mb-4 w-10 h-10"></i>
+                <h4 class="text-xl font-bold mb-2">Infinite Retention</h4>
+                <p class="text-gray-400">Files stay active as long as they are being downloaded. No expiration dates.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/10 py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-gray-500">
+            <p>&copy; 2026 Extremeupload. All rights reserved.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#" class="hover:text-white">Privacy Policy</a>
+                <a href="#" class="hover:text-white">Terms of Service</a>
+                <a href="#" class="hover:text-white">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modal-overlay"></div>
+        <div class="glass-container p-8 max-w-lg w-full relative z-10 animate-slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">GitHub Settings</h3>
+                <button id="close-settings" class="text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-1">GitHub Personal Access Token</label>
+                    <input type="password" id="gh-token"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-accent outline-none transition-all"
+                        placeholder="ghp_xxxxxxxxxxxx">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-1">Repository (owner/repo)</label>
+                    <input type="text" id="gh-repo"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-accent outline-none transition-all"
+                        placeholder="username/Extremeupload">
+                </div>
+                <div class="pt-4">
+                    <button id="save-settings"
+                        class="w-full bg-accent text-white py-4 rounded-xl font-bold shadow-lg hover:bg-accent-hover transition-all">
+                        Save Configuration
+                    </button>
+                </div>
+            </div>
+            <p class="mt-4 text-xs text-gray-500">
+                Your token is only stored locally in your browser.
+                Keep it safe!
+            </p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>
