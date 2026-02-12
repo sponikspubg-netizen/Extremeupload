@@ -137,31 +137,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function handleFiles(files) {
-        const newFiles = [...files];
+        const newFiles = Array.from(files).map(file => ({
+            file: file,
+            id: Math.random().toString(36).substr(2, 9)
+        }));
+
         filesArray = [...filesArray, ...newFiles];
-        newFiles.forEach(file => renderFileItem(file));
+        newFiles.forEach(item => renderFileItem(item));
+
         if (filesArray.length > 0) {
             actionsBar.classList.remove('hidden');
             actionsBar.classList.add('flex');
         }
     }
 
-    function renderFileItem(file) {
-        const id = Math.random().toString(36).substr(2, 9);
-        const item = document.createElement('div');
-        item.className = 'file-item';
-        item.id = `file-${id}`;
-
-        const size = (file.size / (1024 * 1024)).toFixed(2);
-
-        item.innerHTML = `
+    function renderFileItem(item) {
+        const file = item.file;
+        const id = item.id;
+        const div = document.createElement('div');
+        div.className = 'file-item';
+        div.id = `file-${id}`;
+        div.innerHTML = `
             <i data-lucide="file" class="text-accent"></i>
             <div class="flex-1">
                 <div class="flex justify-between items-center">
                     <span class="font-bold truncate max-w-[200px]">${file.name}</span>
-                    <span class="text-sm text-gray-400 font-mono" id="status-${id}">${size} MB</span>
+                    <span class="text-sm text-gray-400 font-mono" id="status-${id}">${(file.size / (1024 * 1024)).toFixed(2)} MB</span>
                 </div>
-                <div class="progress-bar">
+                <!-- Link Container Placeholder -->
+                <div id="link-container-${id}" class="hidden mt-2"></div>
+                
+                <div class="progress-bar" id="progress-bar-container-${id}">
                     <div class="progress-fill" id="progress-${id}"></div>
                 </div>
             </div>
@@ -170,14 +176,14 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>
         `;
 
-        fileList.appendChild(item);
+        fileList.appendChild(div);
         lucide.createIcons();
 
-        item.querySelector('.remove-btn').addEventListener('click', () => {
-            item.classList.add('animate-fade-out');
+        div.querySelector('.remove-btn').addEventListener('click', () => {
+            div.classList.add('animate-fade-out');
             setTimeout(() => {
-                item.remove();
-                filesArray = filesArray.filter(f => f !== file);
+                div.remove();
+                filesArray = filesArray.filter(f => f.id !== id);
                 if (filesArray.length === 0) {
                     actionsBar.classList.add('hidden');
                     actionsBar.classList.remove('flex');
@@ -197,59 +203,50 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadAllBtn.disabled = true;
         uploadAllBtn.innerHTML = '<span class="flex items-center gap-2">Uploading to GitHub...</span>';
 
-        for (const file of filesArray) {
-            // Find the specific item element based on file name (approximate match for demo)
-            // A better way is to store ref in filesArray, but for now we search DOM
-            const items = document.querySelectorAll('.file-item');
-            let itemEl = null;
-            let statusEl = null;
-            let progressEl = null;
-
-            // Simple search to find the matching element
-            items.forEach(el => {
-                if (el.querySelector('span.font-bold').textContent === file.name) {
-                    itemEl = el;
-                    statusEl = el.querySelector('.text-gray-400');
-                    progressEl = el.querySelector('.progress-fill');
-                }
-            });
-
-            if (!itemEl) continue;
+        for (const item of filesArray) {
+            const id = item.id;
+            const file = item.file;
+            const statusEl = document.getElementById(`status-${id}`);
+            const progressEl = document.getElementById(`progress-${id}`);
+            const progressBarContainer = document.getElementById(`progress-bar-container-${id}`);
+            const linkContainer = document.getElementById(`link-container-${id}`);
 
             try {
                 const fileData = await uploadToGitHub(file, progressEl);
 
                 // Update UI with Link
                 const shareUrl = `${window.location.origin}${window.location.pathname}?v=${fileData.fullName}`;
-                statusEl.innerHTML = `<span class="text-green-400">Uploaded!</span>`;
+                if (statusEl) statusEl.innerHTML = `<span class="text-green-400">Uploaded!</span>`;
 
-                // Replace progress bar with Link UI
-                const container = itemEl.querySelector('.flex-1');
-                const linkContainer = document.createElement('div');
-                linkContainer.className = 'mt-2 flex gap-2 animate-fade-in';
-                linkContainer.innerHTML = `
-                    <input type="text" value="${shareUrl}" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-gray-300 outline-none" readonly>
-                    <button class="copy-link-btn bg-accent text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-accent-hover transition-colors">
-                        Copy
-                    </button>
-                    <a href="${shareUrl}" target="_blank" class="bg-white/10 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-white/20 transition-colors">
-                        Open
-                    </a>
-                `;
+                if (progressBarContainer) progressBarContainer.style.display = 'none';
+                if (linkContainer) {
+                    linkContainer.classList.remove('hidden');
+                    linkContainer.className = 'mt-2 flex gap-2 animate-fade-in';
+                    linkContainer.innerHTML = `
+                        <input type="text" value="${shareUrl}" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-gray-300 outline-none" readonly>
+                        <button class="copy-link-btn bg-accent text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-accent-hover transition-colors">
+                            Copy
+                        </button>
+                        <a href="${shareUrl}" target="_blank" class="bg-white/10 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-white/20 transition-colors">
+                            Open
+                        </a>
+                    `;
 
-                container.appendChild(linkContainer);
-                itemEl.querySelector('.progress-bar').style.display = 'none';
-
-                // Activate Copy Button
-                linkContainer.querySelector('.copy-link-btn').addEventListener('click', (e) => {
-                    navigator.clipboard.writeText(shareUrl);
-                    e.target.textContent = 'Copied!';
-                    setTimeout(() => e.target.textContent = 'Copy', 2000);
-                });
+                    // Activate Copy Button
+                    const copyBtn = linkContainer.querySelector('.copy-link-btn');
+                    if (copyBtn) {
+                        copyBtn.addEventListener('click', (e) => {
+                            navigator.clipboard.writeText(shareUrl);
+                            e.target.textContent = 'Copied!';
+                            setTimeout(() => e.target.textContent = 'Copy', 2000);
+                        });
+                    }
+                }
 
             } catch (err) {
                 console.error(err);
-                if (statusEl) statusEl.innerHTML = `<span class="text-red-500">Error: ${err.message}</span>`;
+                if (statusEl) statusEl.innerHTML = `<span class="text-red-500">Error</span>`;
+                alert(`Error uploading ${file.name}: ${err.message}`);
             }
         }
 
