@@ -108,8 +108,102 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Configuration saved!');
     });
 
-    // --- File Handling Logic ---
-    browseBtn.addEventListener('click', () => fileInput.click());
+    // --- New Workupload-Style Logic ---
+
+    // Select Files Box Click
+    dropArea.addEventListener('click', (e) => {
+        if (e.target !== fileInput) {
+            fileInput.click();
+        }
+    });
+
+    // Handle File Selection (Show List & Form)
+    function handleFiles(files) {
+        const newFiles = Array.from(files).map(file => ({
+            file: file,
+            id: Math.random().toString(36).substr(2, 9)
+        }));
+
+        filesArray = [...filesArray, ...newFiles];
+
+        // Show Form if files exist
+        if (filesArray.length > 0) {
+            fileList.classList.remove('hidden');
+            document.getElementById('upload-form').classList.remove('hidden');
+        }
+
+        // Render compact list items
+        newFiles.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'file-item-compact';
+            div.id = `file-${item.id}`;
+            div.innerHTML = `
+                <div class="flex-1">
+                    <div class="flex justify-between">
+                        <span class="font-bold">${item.file.name}</span>
+                        <span class="text-muted">${(item.file.size / (1024 * 1024)).toFixed(2)} MB</span>
+                    </div>
+                    <div class="progress-bar" id="progress-bar-${item.id}" style="display:none;">
+                        <div class="progress-fill" id="progress-${item.id}"></div>
+                    </div>
+                </div>
+                <div class="ml-4 cursor-pointer text-muted hover:text-white" data-id="${item.id}">&times;</div>
+            `;
+
+            // Remove handler
+            div.querySelector('.ml-4').addEventListener('click', (e) => {
+                e.stopPropagation();
+                filesArray = filesArray.filter(f => f.id !== item.id);
+                div.remove();
+                if (filesArray.length === 0) {
+                    fileList.classList.add('hidden');
+                    document.getElementById('upload-form').classList.add('hidden');
+                }
+            });
+
+            fileList.appendChild(div);
+        });
+    }
+
+    // "Save Now" Button Click
+    const saveNowBtn = document.getElementById('save-now-btn');
+    saveNowBtn.addEventListener('click', async () => {
+        if (!config.token || !config.repo) {
+            alert('Please configure GitHub Settings first!');
+            settingsBtn.click();
+            return;
+        }
+
+        if (filesArray.length === 0) return;
+
+        saveNowBtn.disabled = true;
+        saveNowBtn.innerHTML = 'Uploading...';
+
+        // Upload first file (Workupload style implies single file focus often, but we support multi)
+        // For the "Success View" demo, we'll focus on the LAST uploaded file to show the detailed success card.
+
+        let lastUploadedFile = null;
+
+        for (const item of filesArray) {
+            const progressEl = document.getElementById(`progress-${item.id}`);
+            const barContainer = document.getElementById(`progress-bar-${item.id}`);
+            barContainer.style.display = 'block';
+
+            try {
+                const fileData = await uploadToGitHub(item.file, progressEl);
+                lastUploadedFile = fileData;
+            } catch (err) {
+                console.error(err);
+                alert(`Error uploading ${item.file.name}: ${err.message}`);
+            }
+        }
+
+        saveNowBtn.innerHTML = 'Done!';
+
+        if (lastUploadedFile) {
+            showDownloadView(lastUploadedFile.fullName); // Show success view immediately
+        }
+    });
 
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropArea.addEventListener(eventName, preventDefaults, false);
@@ -134,127 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fileInput.addEventListener('change', (e) => {
         handleFiles(e.target.files);
-    });
-
-    function handleFiles(files) {
-        const newFiles = Array.from(files).map(file => ({
-            file: file,
-            id: Math.random().toString(36).substr(2, 9)
-        }));
-
-        filesArray = [...filesArray, ...newFiles];
-        newFiles.forEach(item => renderFileItem(item));
-
-        if (filesArray.length > 0) {
-            actionsBar.classList.remove('hidden');
-            actionsBar.classList.add('flex');
-        }
-    }
-
-    function renderFileItem(item) {
-        const file = item.file;
-        const id = item.id;
-        const div = document.createElement('div');
-        div.className = 'file-item';
-        div.id = `file-${id}`;
-        div.innerHTML = `
-            <i data-lucide="file" class="text-accent"></i>
-            <div class="flex-1">
-                <div class="flex justify-between items-center">
-                    <span class="font-bold truncate max-w-[200px]">${file.name}</span>
-                    <span class="text-sm text-gray-400 font-mono" id="status-${id}">${(file.size / (1024 * 1024)).toFixed(2)} MB</span>
-                </div>
-                <!-- Link Container Placeholder -->
-                <div id="link-container-${id}" class="hidden mt-2"></div>
-                
-                <div class="progress-bar" id="progress-bar-container-${id}">
-                    <div class="progress-fill" id="progress-${id}"></div>
-                </div>
-            </div>
-            <button class="remove-btn text-gray-500 hover:text-accent transition-colors" data-id="${id}">
-                <i data-lucide="x-circle"></i>
-            </button>
-        `;
-
-        fileList.appendChild(div);
-        lucide.createIcons();
-
-        div.querySelector('.remove-btn').addEventListener('click', () => {
-            div.classList.add('animate-fade-out');
-            setTimeout(() => {
-                div.remove();
-                filesArray = filesArray.filter(f => f.id !== id);
-                if (filesArray.length === 0) {
-                    actionsBar.classList.add('hidden');
-                    actionsBar.classList.remove('flex');
-                }
-            }, 300);
-        });
-    }
-
-    // --- GitHub Upload Logic ---
-    uploadAllBtn.addEventListener('click', async () => {
-        if (!config.token || !config.repo) {
-            alert('Please configure GitHub Settings first!');
-            settingsBtn.click();
-            return;
-        }
-
-        uploadAllBtn.disabled = true;
-        uploadAllBtn.innerHTML = '<span class="flex items-center gap-2">Uploading to GitHub...</span>';
-
-        for (const item of filesArray) {
-            const id = item.id;
-            const file = item.file;
-            const statusEl = document.getElementById(`status-${id}`);
-            const progressEl = document.getElementById(`progress-${id}`);
-            const progressBarContainer = document.getElementById(`progress-bar-container-${id}`);
-            const linkContainer = document.getElementById(`link-container-${id}`);
-
-            try {
-                const fileData = await uploadToGitHub(file, progressEl);
-
-                // Update UI with Link
-                const shareUrl = `${window.location.origin}${window.location.pathname}?v=${fileData.fullName}`;
-                if (statusEl) statusEl.innerHTML = `<span class="text-green-400">Uploaded!</span>`;
-
-                if (progressBarContainer) progressBarContainer.style.display = 'none';
-                if (linkContainer) {
-                    linkContainer.classList.remove('hidden');
-                    linkContainer.className = 'mt-2 flex gap-2 animate-fade-in';
-                    linkContainer.innerHTML = `
-                        <input type="text" value="${shareUrl}" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-gray-300 outline-none" readonly>
-                        <button class="copy-link-btn bg-accent text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-accent-hover transition-colors">
-                            Copy
-                        </button>
-                        <a href="${shareUrl}" target="_blank" class="bg-white/10 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-white/20 transition-colors">
-                            Open
-                        </a>
-                    `;
-
-                    // Activate Copy Button
-                    const copyBtn = linkContainer.querySelector('.copy-link-btn');
-                    if (copyBtn) {
-                        copyBtn.addEventListener('click', (e) => {
-                            navigator.clipboard.writeText(shareUrl);
-                            e.target.textContent = 'Copied!';
-                            setTimeout(() => e.target.textContent = 'Copy', 2000);
-                        });
-                    }
-                }
-
-            } catch (err) {
-                console.error(err);
-                if (statusEl) statusEl.innerHTML = `<span class="text-red-500">Error</span>`;
-                alert(`Error uploading ${file.name}: ${err.message}`);
-            }
-        }
-
-        uploadAllBtn.innerHTML = 'All Files Processed ✅';
-        setTimeout(() => {
-            uploadAllBtn.disabled = false;
-            uploadAllBtn.innerHTML = 'Upload Everything';
-        }, 3000);
     });
 
     async function uploadToGitHub(file, progressElement) {

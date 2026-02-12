@@ -1,32 +1,16 @@
 :root {
-    --bg-dark: #0a0a0f;
-    --light: #f8fafc;
-    --accent: #eb364b;
-    --accent-hover: #ff4d5e;
-    --glass: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-heavy: rgba(255, 255, 255, 0.05);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Outfit', sans-serif;
+    --bg-dark: #0f0f0f;
+    --card-bg: #1a1a1a;
+    --text-main: #ffffff;
+    --text-muted: #a0a0a0;
+    --accent: #0088ff;
+    --accent-hover: #0066cc;
+    --border: #333333;
+    --input-bg: #252525;
 }
 
 body {
     background-color: var(--bg-dark);
-    color: var(--light);
-    line-height: 1.6;
-}
-
-.text-accent {
-    color: var(--accent);
-}
-
-.bg-accent {
-    background-color: var(--accent);
 }
 
 .bg-dark {

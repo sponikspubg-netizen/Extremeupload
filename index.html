@@ -12,158 +12,159 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/10.16.4/framer-motion.umd.min.js"></script>
-</head>
 
-<body class="bg-dark text-light overflow-x-hidden">
-    <div class="background-blob blob-1"></div>
-    <div class="background-blob blob-2"></div>
-
-    <nav class="glass-nav sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center space-x-2">
-            <div class="logo-icon bg-accent p-2 rounded-xl">
-                <i data-lucide="upload-cloud" class="text-white"></i>
-            </div>
-            <span class="text-2xl font-extrabold tracking-tight">EXTREME<span class="text-accent">UPLOAD</span></span>
+<body>
+    <nav>
+        <a href="#" id="logo-btn" class="logo">Extreme<span>upload</span></a>
+        <div class="nav-links">
+            <span id="home-btn" class="nav-item active">Home</span>
+            <span id="my-uploads-btn" class="nav-item">My Uploads</span>
+            <span id="settings-btn" class="nav-item">Settings</span>
         </div>
-        <div class="hidden md:flex space-x-8 font-medium">
-            <a href="#" id="home-btn" class="hover:text-accent transition-colors">Home</a>
-            <button id="my-uploads-btn" class="hover:text-accent transition-colors flex items-center gap-1">
-                <i data-lucide="list" class="w-4 h-4"></i> My Uploads
-            </button>
-            <button id="settings-btn" class="hover:text-accent transition-colors flex items-center gap-1">
-                <i data-lucide="settings" class="w-4 h-4"></i> Settings
-            </button>
-        </div>
-        <button
-            class="bg-white text-dark px-6 py-2 rounded-full font-bold hover:bg-accent hover:text-white transition-all shadow-lg active:scale-95">
-            Sign Up
-        </button>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-6 pt-20 pb-32">
-        <section class="text-center mb-16" id="welcome-text">
-            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
-                Upload files without <br><span class="gradient-text">Limits & Hassle</span>
-            </h1>
-            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
-                The fastest way to share your files. Secure, reliable, and completely free.
-                Drag and drop your content right here.
-            </p>
-        </section>
+    <main>
+        <!-- UPLOAD VIEW -->
+        <section id="upload-view" class="upload-card">
+            <div class="hero-text">
+                <h1>Store and send large files!</h1>
+                <p>Up to 2 GB files | without registration | all filetypes | secure</p>
+            </div>
 
-        <section id="upload-view">
-            <div id="drop-area" class="glass-container p-12 text-center relative overflow-hidden group">
-                <div class="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div class="upload-inner block">
-                    <div class="mb-6 flex justify-center">
-                        <div class="upload-circle glass p-8 rounded-full">
-                            <i data-lucide="plus" class="w-12 h-12 text-accent"></i>
-                        </div>
+            <div id="drop-area" class="select-box">
+                <i data-lucide="file-plus"></i>
+                <span class="text-xl font-bold">Select files</span>
+                <p class="text-sm opacity-80 mt-1">- or drag and drop files in this window -</p>
+                <input type="file" id="file-input" multiple hidden>
+            </div>
+
+            <!-- Selected Files List -->
+            <div id="file-list" class="file-list-compact hidden"></div>
+
+            <!-- Options Form -->
+            <div id="upload-form" class="upload-form hidden">
+                <div class="form-group">
+                    <label>Email Receivers (Optional)</label>
+                    <div class="form-row">
+                        <input type="email" placeholder="optional" class="form-input" disabled>
+                        <button class="form-input" style="width: auto; cursor: not-allowed;"><i data-lucide="send"
+                                style="width: 16px;"></i></button>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Drag & Drop files here</h3>
-                    <p class="text-gray-400 mb-8">or click to browse your computer</p>
-                    <input type="file" id="file-input" class="hidden" multiple>
-                    <button id="browse-btn"
-                        class="bg-accent text-white px-8 py-4 rounded-2xl font-bold shadow-[0_10px_20px_rgba(235,54,75,0.3)] hover:scale-105 transition-transform active:scale-95">
-                        Choose Files
-                    </button>
                 </div>
-            </div>
 
-            <div id="file-list" class="mt-8 space-y-4">
-                <!-- Files will be injected here -->
-            </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>File Password</label>
+                        <input type="password" placeholder="optional" class="form-input" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Max Downloads</label>
+                        <input type="number" placeholder="optional" class="form-input" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Storage (Days)</label>
+                        <input type="number" placeholder="optional" class="form-input" disabled>
+                    </div>
+                </div>
 
-            <div id="actions-bar" class="hidden mt-8 justify-center">
-                <button id="upload-all-btn"
-                    class="bg-white text-dark px-12 py-4 rounded-2xl font-bold shadow-xl hover:bg-accent hover:text-white transition-all">
-                    Upload Everything
+                <div class="mt-4 text-xs text-muted text-center">
+                    Please note our data protection regulations and terms of use.
+                </div>
+
+                <button id="save-now-btn" class="save-btn">
+                    <i data-lucide="share-2" style="width: 16px; margin-right: 8px; display: inline-block;"></i>
+                    Save now!
                 </button>
             </div>
+        </section>
 
-            <!-- Main Ad Placeholder -->
-            <div class="ad-container mt-12 glass-card p-4 text-center overflow-hidden">
-                <div
-                    class="flex justify-between items-center mb-2 px-2 text-[10px] uppercase tracking-widest text-gray-500 font-bold">
-                    <span>Sponsored Content</span>
-                    <i data-lucide="info" class="w-3 h-3"></i>
-                </div>
-                <div
-                    class="ad-placeholder h-32 flex items-center justify-center border border-dashed border-white/5 rounded-xl bg-white/5">
-                    <p class="text-gray-600 text-sm italic">Premium Ad Space Available</p>
-                </div>
+        <!-- MY UPLOADS VIEW (Table Style) -->
+        <section id="my-uploads-view" class="success-container hidden">
+            <h2 class="text-xl text-white mb-4">My Uploads</h2>
+            <div id="uploads-history-list" class="flex flex-col gap-2">
+                <!-- Items injected here -->
             </div>
         </section>
 
-        <section id="my-uploads-view" class="hidden">
-            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
-                <i data-lucide="history" class="text-accent"></i> My Uploads
-            </h2>
-            <div id="uploads-history-list" class="space-y-4">
-                <!-- History items will be injected here -->
-                <div class="glass-card p-12 text-center text-gray-500">
-                    <i data-lucide="folder-open" class="mx-auto mb-4 w-12 h-12 opacity-20"></i>
-                    <p>No uploads yet. Start sharing some files!</p>
+        <!-- DOWNLOAD / SUCCESS VIEW -->
+        <section id="download-view" class="success-container hidden">
+            <div class="file-info-card">
+                <h1 id="download-filename" class="file-title">filename.ext</h1>
+                <p id="download-filesize" class="text-muted">(0.00 MB)</p>
+
+                <p class="text-muted mt-4">Download the file now.</p>
+
+                <a id="download-link" href="#" target="_blank" class="download-btn-large">
+                    <i data-lucide="download" style="width: 18px; margin-right: 8px; display: inline-block;"></i>
+                    Download
+                </a>
+
+                <div class="text-left mt-8">
+                    <label class="text-muted text-xs uppercase mb-1 block">Share file:</label>
+                    <div class="share-row">
+                        <input type="text" id="share-url-input" class="share-input" readonly value="...">
+                        <i data-lucide="copy" class="text-muted cursor-pointer hover:text-white"
+                            id="copy-share-btn"></i>
+                    </div>
+                    <p class="text-xs text-muted mt-2">Uploaded a wrong file? <a href="#" class="text-accent">Delete
+                            file</a> (valid 12 hours)</p>
                 </div>
             </div>
-        </section>
 
-        <section id="download-view" class="hidden max-w-2xl mx-auto">
-            <div class="glass-container p-12 text-center">
-                <div class="mb-8 flex justify-center">
-                    <div class="p-8 glass rounded-full ring-8 ring-accent/10">
-                        <i data-lucide="file-down" class="w-16 h-16 text-accent"></i>
+            <div class="file-details-card">
+                <div class="flex justify-between mb-1">
+                    <span>Filename:</span>
+                    <span id="detail-filename" class="text-white">...</span>
+                </div>
+                <div class="flex justify-between mb-1">
+                    <span>Filesize:</span>
+                    <span id="detail-filesize" class="text-white">...</span>
+                </div>
+                <!-- Checksum / QR Placeholder -->
+                <div class="mt-4 border-t border-white/10 pt-4 flex gap-4">
+                    <div class="bg-white p-1 rounded w-16 h-16 flex items-center justify-center">
+                        <i data-lucide="qr-code" class="text-black w-10 h-10"></i>
+                    </div>
+                    <div class="text-xs flex-1 break-all">
+                        <div class="mb-1">Checksum (SHA256):</div>
+                        <span
+                            class="text-white opacity-50">3f11603b39d0d581e9cdf71b099c189b00b49bc80bac73e630b63d327</span>
                     </div>
                 </div>
-                <h2 id="download-filename" class="text-3xl font-extrabold mb-2 truncate">Filename.zip</h2>
-                <p id="download-filesize" class="text-gray-400 mb-8">0.00 MB • Ready to download</p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a id="download-link" href="#" target="_blank"
-                        class="bg-accent text-white px-12 py-4 rounded-2xl font-bold shadow-lg hover:scale-105 transition-all text-xl">
-                        Download Now
-                    </a>
-                </div>
-
-                <!-- Ad below Download -->
-                <div class="mt-8 pt-8 border-t border-white/5">
-                    <div
-                        class="ad-placeholder-small h-20 flex items-center justify-center bg-white/5 rounded-xl border border-dashed border-white/10 group cursor-pointer hover:bg-white/10 transition-colors">
-                        <span class="text-gray-500 text-xs">Unlock Premium Speeds - Click to learn more</span>
-                    </div>
-                </div>
             </div>
         </section>
 
-        <section class="mt-32 grid md:grid-cols-3 gap-8">
-            <div class="glass-card p-8">
-                <i data-lucide="shield-check" class="text-accent mb-4 w-10 h-10"></i>
-                <h4 class="text-xl font-bold mb-2">Military Encryption</h4>
-                <p class="text-gray-400">Your files are encrypted before they even leave your computer.</p>
-            </div>
-            <div class="glass-card p-8">
-                <i data-lucide="zap" class="text-accent mb-4 w-10 h-10"></i>
-                <h4 class="text-xl font-bold mb-2">Blazing Speeds</h4>
-                <p class="text-gray-400">Optimized servers worldwide ensure the fastest upload and download possible.
-                </p>
-            </div>
-            <div class="glass-card p-8">
-                <i data-lucide="infinity" class="text-accent mb-4 w-10 h-10"></i>
-                <h4 class="text-xl font-bold mb-2">Infinite Retention</h4>
-                <p class="text-gray-400">Files stay active as long as they are being downloaded. No expiration dates.
-                </p>
-            </div>
-        </section>
+        <!-- ADS Section (Bottom) -->
+        <div class="ad-container" style="position: fixed; bottom: 0; width: 100%; pointer-events: none;">
+            <!-- Ad placeholder if needed, or remove -->
+        </div>
     </main>
 
-    <footer class="border-t border-white/10 py-12 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-gray-500">
-            <p>&copy; 2026 Extremeupload. All rights reserved.</p>
-            <div class="flex space-x-6 mt-4 md:mt-0">
-                <a href="#" class="hover:text-white">Privacy Policy</a>
-                <a href="#" class="hover:text-white">Terms of Service</a>
-                <a href="#" class="hover:text-white">Contact</a>
+    <!-- Settings Modal (Re-styled simplified) -->
+    <div id="settings-modal" class="hidden"
+        style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 50;">
+        <div class="upload-card" style="width: 400px; position: relative;">
+            <i id="close-settings" data-lucide="x" class="cursor-pointer"
+                style="position: absolute; top: 1rem; right: 1rem;"></i>
+            <h2 class="text-xl mb-4 text-white">Settings</h2>
+            <div class="form-group mb-4">
+                <label>GitHub Token</label>
+                <input type="password" id="gh-token" class="form-input">
             </div>
+            <div class="form-group mb-4">
+                <label>Repository (user/repo)</label>
+                <input type="text" id="gh-repo" class="form-input">
+            </div>
+            <button id="save-settings" class="save-btn">Save Configuration</button>
         </div>
+    </div>
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-gray-500">
+        <p>&copy; 2026 Extremeupload. All rights reserved.</p>
+        <div class="flex space-x-6 mt-4 md:mt-0">
+            <a href="#" class="hover:text-white">Privacy Policy</a>
+            <a href="#" class="hover:text-white">Terms of Service</a>
+        </div>
+    </div>
     </footer>
 
     <!-- Settings Modal -->
