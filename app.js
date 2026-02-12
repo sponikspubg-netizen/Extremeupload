@@ -198,15 +198,58 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadAllBtn.innerHTML = '<span class="flex items-center gap-2">Uploading to GitHub...</span>';
 
         for (const file of filesArray) {
-            const statusEl = document.querySelector(`[id^="status-"]`); // Simplification for demo
-            const progressEl = document.querySelector(`[id^="progress-"]`);
+            // Find the specific item element based on file name (approximate match for demo)
+            // A better way is to store ref in filesArray, but for now we search DOM
+            const items = document.querySelectorAll('.file-item');
+            let itemEl = null;
+            let statusEl = null;
+            let progressEl = null;
+
+            // Simple search to find the matching element
+            items.forEach(el => {
+                if (el.querySelector('span.font-bold').textContent === file.name) {
+                    itemEl = el;
+                    statusEl = el.querySelector('.text-gray-400');
+                    progressEl = el.querySelector('.progress-fill');
+                }
+            });
+
+            if (!itemEl) continue;
 
             try {
-                await uploadToGitHub(file, progressEl);
+                const fileData = await uploadToGitHub(file, progressEl);
+
+                // Update UI with Link
+                const shareUrl = `${window.location.origin}${window.location.pathname}?v=${fileData.fullName}`;
+                statusEl.innerHTML = `<span class="text-green-400">Uploaded!</span>`;
+
+                // Replace progress bar with Link UI
+                const container = itemEl.querySelector('.flex-1');
+                const linkContainer = document.createElement('div');
+                linkContainer.className = 'mt-2 flex gap-2 animate-fade-in';
+                linkContainer.innerHTML = `
+                    <input type="text" value="${shareUrl}" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-gray-300 outline-none" readonly>
+                    <button class="copy-link-btn bg-accent text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-accent-hover transition-colors">
+                        Copy
+                    </button>
+                    <a href="${shareUrl}" target="_blank" class="bg-white/10 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-white/20 transition-colors">
+                        Open
+                    </a>
+                `;
+
+                container.appendChild(linkContainer);
+                itemEl.querySelector('.progress-bar').style.display = 'none';
+
+                // Activate Copy Button
+                linkContainer.querySelector('.copy-link-btn').addEventListener('click', (e) => {
+                    navigator.clipboard.writeText(shareUrl);
+                    e.target.textContent = 'Copied!';
+                    setTimeout(() => e.target.textContent = 'Copy', 2000);
+                });
+
             } catch (err) {
                 console.error(err);
-                alert(`Failed to upload ${file.name}: ${err.message}`);
-                break;
+                if (statusEl) statusEl.innerHTML = `<span class="text-red-500">Error: ${err.message}</span>`;
             }
         }
 
