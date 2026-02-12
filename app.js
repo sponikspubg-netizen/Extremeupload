@@ -16,25 +16,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // Nav Buttons
     const homeBtn = document.getElementById('home-btn');
     const myUploadsBtn = document.getElementById('my-uploads-btn');
-    const settingsBtn = document.getElementById('settings-btn');
+    // const settingsBtn = document.getElementById('settings-btn'); // Removed
 
     // History Elements
     const historyList = document.getElementById('uploads-history-list');
 
     // Settings Elements
-    const settingsModal = document.getElementById('settings-modal');
-    const closeSettings = document.getElementById('close-settings');
-    const modalOverlay = document.getElementById('modal-overlay');
-    const saveSettings = document.getElementById('save-settings');
-    const ghTokenInput = document.getElementById('gh-token');
-    const ghRepoInput = document.getElementById('gh-repo');
+    // const settingsModal = document.getElementById('settings-modal'); // Removed
+    // const closeSettings = document.getElementById('close-settings'); // Removed
+    // const modalOverlay = document.getElementById('modal-overlay'); // Removed
+    // const saveSettings = document.getElementById('save-settings'); // Removed
+    // const ghTokenInput = document.getElementById('gh-token'); // Removed
+    // const ghRepoInput = document.getElementById('gh-repo'); // Removed
 
     let filesArray = [];
-    let config = JSON.parse(localStorage.getItem('gh_config')) || { token: '', repo: '' };
+
+    // --- CONFIGURATION (HARDCODED) ---
+    // ЗАПОЛНИТЕ ЭТИ ДАННЫЕ В КОДЕ:
+    const config = {
+        token: 'ghp_YOUR_TOKEN_HERE',  // Вставьте ваш GitHub Token сюда
+        repo: 'sponikspubg-netizen/Extremeupload' // Ваш репозиторий
+    };
 
     // Initialize inputs from localStorage
-    ghTokenInput.value = config.token;
-    ghRepoInput.value = config.repo;
+    // ghTokenInput.value = config.token; // Removed
+    // ghRepoInput.value = config.repo; // Removed
 
     // --- View Routing ---
     const checkRoute = () => {
@@ -92,21 +98,21 @@ document.addEventListener('DOMContentLoaded', () => {
     myUploadsBtn.addEventListener('click', showMyUploadsView);
 
     // --- Settings Logic ---
-    settingsBtn.addEventListener('click', () => {
-        settingsModal.classList.replace('hidden', 'flex');
-    });
+    // settingsBtn.addEventListener('click', () => { // Removed
+    //     settingsModal.classList.replace('hidden', 'flex'); // Removed
+    // }); // Removed
 
-    const closeModal = () => settingsModal.classList.replace('flex', 'hidden');
-    closeSettings.addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', closeModal);
+    // const closeModal = () => settingsModal.classList.replace('flex', 'hidden'); // Removed
+    // closeSettings.addEventListener('click', closeModal); // Removed
+    // modalOverlay.addEventListener('click', closeModal); // Removed
 
-    saveSettings.addEventListener('click', () => {
-        config.token = ghTokenInput.value.trim();
-        config.repo = ghRepoInput.value.trim();
-        localStorage.setItem('gh_config', JSON.stringify(config));
-        closeModal();
-        alert('Configuration saved!');
-    });
+    // saveSettings.addEventListener('click', () => { // Removed
+    //     config.token = ghTokenInput.value.trim(); // Removed
+    //     config.repo = ghRepoInput.value.trim(); // Removed
+    //     localStorage.setItem('gh_config', JSON.stringify(config)); // Removed
+    //     closeModal(); // Removed
+    //     alert('Configuration saved!'); // Removed
+    // }); // Removed
 
     // --- New Workupload-Style Logic ---
 
@@ -168,9 +174,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // "Save Now" Button Click
     const saveNowBtn = document.getElementById('save-now-btn');
     saveNowBtn.addEventListener('click', async () => {
-        if (!config.token || !config.repo) {
-            alert('Please configure GitHub Settings first!');
-            settingsBtn.click();
+        // Simple check for placeholder
+        if (config.token.includes('YOUR_TOKEN_HERE')) {
+            alert('ОШИБКА: Вы не вписали GitHub Token в код app.js! Откройте файл app.js и вставьте токен в переменную config.');
             return;
         }
 
@@ -185,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let lastUploadedFile = null;
 
         for (const item of filesArray) {
-            const progressEl = document.getElementById(`progress-${item.id}`);
+            const progressEl = document.getElementById(`progress-bar-${item.id}`);
             const barContainer = document.getElementById(`progress-bar-${item.id}`);
             barContainer.style.display = 'block';
 
