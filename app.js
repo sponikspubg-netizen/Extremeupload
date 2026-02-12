@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURATION (HARDCODED) ---
     // ЗАПОЛНИТЕ ЭТИ ДАННЫЕ В КОДЕ:
     const config = {
-        token: 'ghp_YOUR_TOKEN_HERE',  // Вставьте ваш GitHub Token сюда
+        token: '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',  // Вставьте ваш GitHub Token сюда
         repo: 'sponikspubg-netizen/Extremeupload' // Ваш репозиторий
     };
 
