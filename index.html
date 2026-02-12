@@ -140,9 +140,9 @@
         </div>
     </main>
 
-    <!-- Settings Modal (Re-styled simplified) -->
+    <!-- Settings Modal -->
     <div id="settings-modal" class="hidden"
-        style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 50;">
+        style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 50;">
         <div class="upload-card" style="width: 400px; position: relative;">
             <i id="close-settings" data-lucide="x" class="cursor-pointer"
                 style="position: absolute; top: 1rem; right: 1rem;"></i>
@@ -167,42 +167,7 @@
     </div>
     </footer>
 
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-6">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modal-overlay"></div>
-        <div class="glass-container p-8 max-w-lg w-full relative z-10 animate-slide-up">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold">GitHub Settings</h3>
-                <button id="close-settings" class="text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1">GitHub Personal Access Token</label>
-                    <input type="password" id="gh-token"
-                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-accent outline-none transition-all"
-                        placeholder="ghp_xxxxxxxxxxxx">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1">Repository (owner/repo)</label>
-                    <input type="text" id="gh-repo"
-                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-accent outline-none transition-all"
-                        placeholder="username/Extremeupload">
-                </div>
-                <div class="pt-4">
-                    <button id="save-settings"
-                        class="w-full bg-accent text-white py-4 rounded-xl font-bold shadow-lg hover:bg-accent-hover transition-all">
-                        Save Configuration
-                    </button>
-                </div>
-            </div>
-            <p class="mt-4 text-xs text-gray-500">
-                Your token is only stored locally in your browser.
-                Keep it safe!
-            </p>
-        </div>
-    </div>
-
-    <script src="app.js?v=2"></script>
+    <script src="app.js?v=3"></script>
     <script>lucide.createIcons();</script>
 </body>
 
