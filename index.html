@@ -87,48 +87,49 @@
         </section>
 
         <!-- DOWNLOAD / SUCCESS VIEW -->
+        <!-- DOWNLOAD / SUCCESS VIEW -->
         <section id="download-view" class="success-container hidden">
             <div class="file-info-card">
                 <h1 id="download-filename" class="file-title">filename.ext</h1>
-                <p id="download-filesize" class="text-muted">(0.00 MB)</p>
-
-                <p class="text-muted mt-4">Download the file now.</p>
+                <p class="text-white mt-1">Download the file <span id="download-filename-text">filename.ext</span> now.
+                </p>
 
                 <a id="download-link" href="#" target="_blank" class="download-btn-large">
-                    <i data-lucide="download" style="width: 18px; margin-right: 8px; display: inline-block;"></i>
+                    <i data-lucide="download" style="width: 20px; margin-right: 10px;"></i>
                     Download
                 </a>
 
-                <div class="text-left mt-8">
-                    <label class="text-muted text-xs uppercase mb-1 block">Share file:</label>
+                <div class="text-left mt-6">
+                    <label class="text-muted text-xs uppercase mb-1 block font-bold">Share file:</label>
                     <div class="share-row">
                         <input type="text" id="share-url-input" class="share-input" readonly value="...">
                         <i data-lucide="copy" class="text-muted cursor-pointer hover:text-white"
                             id="copy-share-btn"></i>
                     </div>
-                    <p class="text-xs text-muted mt-2">Uploaded a wrong file? <a href="#" class="text-accent">Delete
-                            file</a> (valid 12 hours)</p>
+                    <p class="text-xs text-muted mt-2">Uploaded a wrong file? <a href="#"
+                            class="text-accent underline">Delete file</a> (12 hours valid)</p>
                 </div>
             </div>
 
             <div class="file-details-card">
-                <div class="flex justify-between mb-1">
-                    <span>Filename:</span>
+                <div class="flex mb-2">
+                    <span class="w-32 text-muted">Filename:</span>
                     <span id="detail-filename" class="text-white">...</span>
                 </div>
-                <div class="flex justify-between mb-1">
-                    <span>Filesize:</span>
+                <div class="flex mb-2">
+                    <span class="w-32 text-muted">Filesize:</span>
                     <span id="detail-filesize" class="text-white">...</span>
                 </div>
-                <!-- Checksum / QR Placeholder -->
-                <div class="mt-4 border-t border-white/10 pt-4 flex gap-4">
-                    <div class="bg-white p-1 rounded w-16 h-16 flex items-center justify-center">
-                        <i data-lucide="qr-code" class="text-black w-10 h-10"></i>
-                    </div>
-                    <div class="text-xs flex-1 break-all">
-                        <div class="mb-1">Checksum (SHA256):</div>
-                        <span
-                            class="text-white opacity-50">3f11603b39d0d581e9cdf71b099c189b00b49bc80bac73e630b63d327</span>
+                <div class="flex mb-2">
+                    <span class="w-32 text-muted">Checksum:</span>
+                    <span
+                        class="text-white opacity-50 text-xs font-mono break-all">3f11603b39d0d581e9cdf71b099c189b00b49bc80bac73e630b63d327</span>
+                </div>
+
+                <div class="mt-4 border-t border-white/10 pt-4">
+                    <div class="text-muted text-xs mb-1">QR-URL:</div>
+                    <div class="bg-white p-1 rounded inline-block">
+                        <i data-lucide="qr-code" class="text-black w-12 h-12"></i>
                     </div>
                 </div>
             </div>

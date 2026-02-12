@@ -79,6 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const originalName = nameParts.join('_');
 
         document.getElementById('download-filename').textContent = originalName;
+        const textSpan = document.getElementById('download-filename-text');
+        if (textSpan) textSpan.textContent = originalName;
         document.getElementById('download-filesize').textContent = "GitHub Hosted File";
 
         // Construct GitHub raw URL (assuming public or with token access via proxy - for now raw)
